@@ -5,18 +5,7 @@
 
 using namespace std;
 
-int determine_index(char*str, char c) {
-	for (int i = 0; i < strlen(str); i++)
-		if (str[i] == c)
-			return i;
 
-	return -1;
-}
-double osad(char*str, double *a, char type) {
-	int index = determine_index(str, type);
-	a[index] = rand() % 10 + 1.0 / (rand() % 10);
-	return a[index];
-}
 int main()
 {
 	srand(time(NULL));
@@ -74,44 +63,48 @@ int main()
 			char osadki[4] = { 'д', 'г', 'с', 'т' };
 			double vol[4];
 
-			char tmp[9] = { -1 };
-			int k[4] = { 0 };
-			int choice, count = 4;
-			char type;
+			int choice, index, i = 0, newRand=0;
+			int *tmp = new int[4];
+			for (int k = 0; k < 4; k++)
+				tmp[k] = -1;
 
-			for (int i = 0; i < 4; i++)
-				tmp[i] = osadki[i];
-
-			while (true)
+			while (i < 4)
 			{
-				cout << "Enter 0 to exit" << endl;
-				cout << "Enter 1 to continue" << endl;
-				cin >> choice;
+				if (newRand == 0)
+				{
+					cout << "Enter 0 to exit" << endl;
+					cout << "Enter 1 to continue" << endl;
+					cin >> choice;
+				}
 
 				if (choice == 0) break;
 				else
 				{
-					cout << "Выберите символ, чтобы увидеть объем осадков по типу:" << endl;
-					cout << "д - дождь" << endl;
-					cout << "г - град" << endl;
-					cout << "с - снег" << endl;
-					cout << "т - туман" << endl;
-
-					cin >> type;
-
-						tmp[count++] = type;
-						for (int j = 0; j < 9; j++)
+						index = rand() % 4;
+						newRand = 0;
+						for (int j = 0; j < 4; j++)
 						{
-							if (tmp[j] == type)
-								k[determine_index(osadki, type)]++;
-
-							if (k[determine_index(osadki, type)] > 2)
+							if (tmp[j] == index)
 							{
-								cout << "Повторный запрос объема данного типа осадков" << endl;
+								newRand++;
 								break;
 							}
 						}
-					cout << osad(osadki, vol, type) << endl;
+					
+						if (newRand > 0) continue;
+						else
+							tmp[i] = index;
+					
+						i++;
+				
+						cout << "д - дождь" << endl;
+						cout << "г - град" << endl;
+						cout << "с - снег" << endl;
+						cout << "т - туман" << endl;
+
+						vol[index] = rand() % 10 + 1.0 / (rand() % 10);
+
+						cout << osadki[index] << ": " << vol[index] << endl;
 				}
 			}
 		}
